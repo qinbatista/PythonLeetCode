@@ -34,9 +34,21 @@ class TwoPointer:
                 value = target - number
                 myDict[value] = index+1
         return []
-
+    def maxArea(self, height: List[int]) -> int:
+        left = 0
+        right = len(height)-1
+        res = 0
+        while left<right:
+            lowestHeight = min(height[left], height[right])
+            res = max((right-left)*lowestHeight,res)
+            if height[left]>height[right]:
+                right-=1
+            else:
+                left+=1
+        return res
 
 if __name__ == "__main__":
     tp = TwoPointer()
     # print(tp.isPalindrome("0P"))
-    print(tp.twoSum([2,3,4], 6))
+    # print(tp.twoSum([2,3,4], 6))
+    print(tp.maxArea([1,8,6,2,5,4,8,3,7]))
