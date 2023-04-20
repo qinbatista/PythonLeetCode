@@ -63,6 +63,25 @@ class Stack:
         backtrack(0, 0)
         return res
 
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        res = [0] * len(temperatures)
+        stack = []
+        for i, t in enumerate(temperatures):
+            while stack and t > stack[-1][0]:
+                stackT, stackIndex = stack.pop()
+                res[stackIndex] = (i-stackIndex)
+            stack.append([t, i])
+        return res
+
+    def carFleet(self, target: int, position: List[int], speed:list[int]) -> int:
+        pair = [[p, s] for p, s in zip(position, speed)]
+        stack = []
+        for p, s in sorted(pair)[::-1]:
+            stack.append((target-p)/s)
+            if len(stack) >= 2 and stack[-1] <= stack[-2]:
+                stack.pop()
+        return len(stack)
+
 
 if __name__ == "__main__":
     s = Stack()
@@ -74,4 +93,6 @@ if __name__ == "__main__":
     # s.top()
     # print(s.getMin())
     # print(s.evalRPN(["2", "1", "+", "3", "*"]))
-    print(s.generateParenthesis(3))
+    # print(s.generateParenthesis(3))
+    # print(s.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))
+    print(s.carFleet(12,[10,8,0,5,3],[2,4,1,1,3]))
