@@ -5,12 +5,12 @@ from typing import List
 
 class ArrayHash:
     def containsDuplicate(self, nums: List[int]) -> bool:
-        hashSet = set()
+        hash = set()
         for num in nums:
-            if num in hashSet:
+            if num in hash:
                 return True
             else:
-                hashSet.add(num)
+                hash.add(num)
         return False
 
     def isAnagram(self, s: str, t: str) -> bool:

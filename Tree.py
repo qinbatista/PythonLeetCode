@@ -15,7 +15,7 @@ class Tree:
         pass
 
     def invertTree(self, root: Optional[TreeNode]):
-        if not root:
+        if root == None:
             return None
         root.left, root.right = root.right, root.left
         self.invertTree(root.left)
@@ -84,6 +84,39 @@ class Tree:
                 cur = cur.left
             else:
                 return cur
+
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        res = []
+        q = collections.deque()
+        q.append(root)
+        while q:
+            qLen = len(q)
+            level = []
+            for i in range(qLen):
+                node = q.popleft()
+                if node:
+                    level.append(node.val)
+                    q.append(node.left)
+                    q.append(node.right)
+            if level:
+                res.append(level)
+        return res
+
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        res = []
+        q = collections.deque([root])
+        while q:
+            rightSide = None
+            qLen = len(q)
+            for i in range(qLen):
+                node = q.popleft()
+                if node:
+                    rightSide = node
+                    q.append(node.left)
+                    q.append(node.right)
+            if rightSide:
+                res.append(rightSide.val)
+        return res
 
 
 if __name__ == "__main__":

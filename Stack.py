@@ -82,9 +82,33 @@ class Stack:
                 stack.pop()
         return len(stack)
 
+    def isValid(self, s: str) -> bool:
+        if len(s)==1:return False
+
+        dic = {")":"(",
+               "]":"[",
+               "}":"{"}
+        stack = []
+        for _str in s:
+            if _str not in dic:
+                stack.append(_str)
+            else:
+                if len(stack)!=0:
+                    if stack[-1] in dic[_str]:
+                         stack.pop()
+                    else:
+                        return False
+                else:
+                        return False
+        return stack==[]
+
+
+
+
 
 if __name__ == "__main__":
     s = Stack()
+    print(s.isValid("(])"))
     # s.push(-2)
     # s.push(0)
     # s.push(-3)
@@ -95,4 +119,4 @@ if __name__ == "__main__":
     # print(s.evalRPN(["2", "1", "+", "3", "*"]))
     # print(s.generateParenthesis(3))
     # print(s.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))
-    print(s.carFleet(12,[10,8,0,5,3],[2,4,1,1,3]))
+    # print(s.carFleet(12,[10,8,0,5,3],[2,4,1,1,3]))
