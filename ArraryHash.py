@@ -33,14 +33,14 @@ class ArrayHash:
                 valueDic[num] = index
         return []
 
-    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+    def groupAnagrams(self, strs: List[str]):
         res = collections.defaultdict(list)
-        for s in strs:
-            count = [0]*26
-            for c in s:
-                count[ord(c)-ord('a')] += 1
-            res[tuple(count)].append(s)
-        return res.values()  # type: ignore
+        for str in strs:
+            key = [0]*26
+            for s in str:
+                key[ord(s)-ord('a')] += 1
+            res[tuple(key)].append(str)
+        return res.values()
 
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:  # type: ignore
         # count each values
@@ -60,19 +60,33 @@ class ArrayHash:
                 if (len(res)) == k:
                     return res
 
+    # def productExceptSelf(self, nums: List[int]) -> List[int]:
+    #     res = [1] * len(nums)
+    #     # calculate the prefix, prefix means previous values's multiple
+    #     prefix = 1
+    #     for i in range(len(nums)):
+    #         res[i] = prefix
+    #         prefix *= nums[i]
+    #     postfix = 1
+    #     # calculate the postfix, postfix means values behind the values' multiple
+    #     for i in range(len(nums)-1, -1, -1):
+    #         res[i] *= postfix
+    #         postfix *= nums[i]
+    #     return res
+
     def productExceptSelf(self, nums: List[int]) -> List[int]:
-        res = [1] * len(nums)
-        # calculate the prefix, prefix means previous values's multiple
+        res = [1]*len(nums)
         prefix = 1
-        for i in range(len(nums)):
+        for i in range(len(res)):
             res[i] = prefix
-            prefix *= nums[i]
-        postfix = 1
-        # calculate the postfix, postfix means values behind the values' multiple
-        for i in range(len(nums)-1, -1, -1):
-            res[i] *= postfix
-            postfix *= nums[i]
+            prefix = prefix*nums[i]
+        prefix = 1
+        for i in range(len(res)-1, -1, -1):
+            res[i] = prefix
+            prefix = prefix*nums[i]
         return res
+
+
 
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         cols = collections.defaultdict(set)
@@ -127,8 +141,8 @@ if __name__ == "__main__":
     # print(arrayHash.isAnagram("anagram", "nagaram"))
     # print(arrayHash.twoSum([2, 7, 11, 15], 9))
     # print(arrayHash.groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]))
-    print(arrayHash.topKFrequent([1, 1, 1, 2, 2, 3], 2))
-    # print(arrayHash.productExceptSelf([1, 2, 3, 4]))
+    # print(arrayHash.topKFrequent([1, 1, 1, 2, 2, 3], 2))
+    print(arrayHash.productExceptSelf([1, 2, 3, 4]))
     # board = [["5", "3", ".", ".", "7", ".", ".", ".", "."],
     #          ["6", ".", ".", "1", "9", "5", ".", ".", "."],
     #          [".", "9", "8", ".", ".", ".", ".", "6", "."],
