@@ -29,12 +29,13 @@ class TwoPointer:
         right = len(height)-1
         res = 0
         while left < right:
-            lowestHeight = min(height[left], height[right])
-            res = max((right-left)*lowestHeight, res)
-            if height[left] > height[right]:
-                right -= 1
+            heigh = min(height[left], height[right])
+            area = (right-left)*heigh
+            res = max(area,res)
+            if height[left]>height[right]:
+                right-=1
             else:
-                left += 1
+                left+=1
         return res
 
     def threeSum(self, nums: List[int]) -> List[List[int]]:
@@ -43,10 +44,10 @@ class TwoPointer:
         for index, num in enumerate(nums):
             if index > 0 and num == nums[index-1]:
                 continue
-            l = index+1
+            l = index + 1
             r = len(nums)-1
             while l < r:
-                threeSum = num + nums[l]+nums[r]
+                threeSum = num+nums[l]+nums[r]
                 if threeSum > 0:
                     r -= 1
                 elif threeSum < 0:
