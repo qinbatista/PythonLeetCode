@@ -18,21 +18,20 @@ class ArrayHash:
             return False
         s_dic = {}
         t_dic = {}
-        for index in range(len(s)):
-            s_dic[s[index]] = s_dic.get(s[index], 0)+1
-            t_dic[t[index]] = t_dic.get(t[index], 0)+1
+        for i in range(len(s)):
+            s_dic[s[i]] = s_dic.get(s[i], 0)+1
+            t_dic[t[i]] = t_dic.get(t[i], 0)+1
         return s_dic == t_dic
 
     def twoSum(self, nums: List[int], target: int) -> List[int]:
-        valueDic = {}
-        for index, num in enumerate(nums):
-            remaining_value = target - num
-            if remaining_value in valueDic:
-                return [valueDic[remaining_value], index]
+        value_dic = {}
+        for index, value in enumerate(nums):
+            remaining = target - value
+            if remaining in value_dic:
+                return [value_dic[remaining],index]
             else:
-                valueDic[num] = index
+                value_dic[value] = index
         return []
-
     def groupAnagrams(self, strs: List[str]):
         res = collections.defaultdict(list)
         for str in strs:
@@ -86,8 +85,6 @@ class ArrayHash:
             prefix = prefix*nums[i]
         return res
 
-
-
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         cols = collections.defaultdict(set)
         rows = collections.defaultdict(set)
@@ -97,7 +94,11 @@ class ArrayHash:
             for c in range(9):
                 if board[r][c] == ".":
                     continue
-                if board[r][c] in rows[r] or board[r][c] in cols[r] or board[r][c] in square[(r//3, c//3)]:
+                if board[r][c] in cols[c]:
+                    return False
+                if board[r][c] in rows[r]:
+                    return False
+                if board[r][c] in square[(r//3, c//3)]:
                     return False
                 cols[c].add(board[r][c])
                 rows[r].add(board[r][c])
@@ -122,27 +123,27 @@ class ArrayHash:
         return res
 
     def longestConsecutive(self, nums: List[int]) -> int:
-        numSet = set(nums)
+        numbers = set(nums)
         longest = 0
-        for n in nums:
-            if n-1 not in numSet:
+        for num in nums:
+            if num-1 not in numbers:
                 length = 0
-                while (n+length) in numSet:
-                    length += 1
-                longest = max(longest, length)
+                while (num+length) in nums:
+                    length+=1
+                longest = max(longest,length)
         return longest
 
 
 if __name__ == "__main__":
     arrayHash = ArrayHash()
-    # arrayHash.longestConsecutive([100, 4, 200, 1, 3, 2])
+    arrayHash.longestConsecutive([100, 4, 200, 1, 3, 2])
     # print(arrayHash.decode(arrayHash.encode(["lint", "code", "love", "you"])))
     # print(arrayHash.containsDuplicate([1, 2, 3, 1]))
     # print(arrayHash.isAnagram("anagram", "nagaram"))
     # print(arrayHash.twoSum([2, 7, 11, 15], 9))
     # print(arrayHash.groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]))
     # print(arrayHash.topKFrequent([1, 1, 1, 2, 2, 3], 2))
-    print(arrayHash.productExceptSelf([1, 2, 3, 4]))
+    # print(arrayHash.productExceptSelf([1, 2, 3, 4]))
     # board = [["5", "3", ".", ".", "7", ".", ".", ".", "."],
     #          ["6", ".", ".", "1", "9", "5", ".", ".", "."],
     #          [".", "9", "8", ".", ".", ".", ".", "6", "."],
