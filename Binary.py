@@ -12,10 +12,10 @@ class Binary:
         right = len(nums)-1
         while left <= right:
             mid = (left+right)//2
-            if target < nums[mid]:
-                right = mid-1
-            elif target > nums[mid]:
-                left = mid+1
+            if nums[mid] > target:
+                right = right - 1
+            elif nums[mid] < target:
+                left = left+1
             else:
                 return mid
         return -1
@@ -23,7 +23,7 @@ class Binary:
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         rows, column = len(matrix), len(matrix[0])
         top, bot = 0, rows-1
-        while top <= bot:
+        while top<= bot:
             row = (top+bot)//2
             if target > matrix[row][-1]:
                 top = row+1
@@ -44,7 +44,6 @@ class Binary:
             else:
                 return True
         return False
-
-
 if __name__ == "__main__":
     tp = Binary()
+    tp.search([5],5)
