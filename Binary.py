@@ -1,5 +1,6 @@
 
 import collections
+import math
 from typing import List
 
 
@@ -23,7 +24,7 @@ class Binary:
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         rows, column = len(matrix), len(matrix[0])
         top, bot = 0, rows-1
-        while top<= bot:
+        while top <= bot:
             row = (top+bot)//2
             if target > matrix[row][-1]:
                 top = row+1
@@ -44,6 +45,61 @@ class Binary:
             else:
                 return True
         return False
+
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        left = 0
+        right = len(piles)
+        res = right
+        while left <= right:
+            k = (left+right)//2
+            hours = 0
+            for p in piles:
+                hours += math.ceil(p/k)
+            if hours <= h:
+                res = min(res, k)
+                right = k-1
+            else:
+                left = k+1
+        return res
+
+    def findMin(self, nums: List[int]) -> int:
+        res = 0
+        right = 0
+        left = len(nums)-1
+        while left <= right:
+            if nums[left] < nums[right]:
+                res = min(res, nums[left])
+                break
+            mid = (left+right)//2
+            res = min(res, nums[mid])
+            if nums[mid] >= nums[left]:
+                left = mid+1
+            else:
+                right = mid - 1
+        return res
+    def search(self, nums: List[int], target: int) -> int:
+        left = 0
+        right = len(nums)-1
+        while left<=right:
+            mid = (left+right)//2
+            if target == nums[mid]:
+                return mid
+            # left sorted
+            if nums[mid]>= nums[left]:
+                if target>nums[mid] or target <nums[left]:
+                    left = mid +1
+                else:
+                    right = right -1
+            # right sorted
+            else:
+                if target<nums[mid] or target >nums[right]:
+                    right = mid-1
+                else:
+                    left = left+1
+        return -1
+
+
+
 if __name__ == "__main__":
     tp = Binary()
-    tp.search([5],5)
+    tp.search([5], 5)
