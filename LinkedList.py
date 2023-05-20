@@ -9,6 +9,13 @@ class ListNode:
         self.next = next
 
 
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+
+
 class LinkedList:
     def __init__(self) -> None:
         pass
@@ -65,14 +72,59 @@ class LinkedList:
         dummy = ListNode(0, head)
         left = dummy
         right = head
-        while n>0 and right:
+        while n > 0 and right:
             right = right.next
-            n-=1
+            n -= 1
         while right:
             left = left.next
             right = right.next
         left.next = left.next.next
         return dummy.next
+
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        oldToCopy = {None: None}
+        cur = head
+        while cur:
+            copy = Node(cur.val)
+            oldToCopy[cur] = copy
+            cur = cur.next
+
+        cur = head
+        while cur:
+            copy = oldToCopy[cur]
+            copy.next = oldToCopy[cur.next]
+            copy.random = oldToCopy[cur.random]
+            cur = cur.next
+        return oldToCopy[head]
+
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode()
+        cur = dummy
+        carry = 0
+        while l1 or l2 or carry:
+            v1 = l1.val if l1 else 0
+            v2 = l2.val if l2 else 0
+
+            val = v1+v2+carry
+            carry = val//10
+            val = val % 10
+            cur.next = ListNode(val)
+
+            cur = cur.next
+            l1 = l1.next if l1 else None
+            l2 = l2.next if l2 else None
+        return dummy.next
+
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        slow, fast = head, head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                return True
+        return False
+
+
 if __name__ == "__main__":
     tp = LinkedList()
     node1 = ListNode(1, None)
