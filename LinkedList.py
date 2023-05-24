@@ -124,6 +124,66 @@ class LinkedList:
                 return True
         return False
 
+    def findDuplicate(self, nums: List[int]) -> int:
+        slow, fast = 0, 0
+        while True:
+            slow = nums[slow]
+            fast = nums[nums[fast]]
+            if slow == fast:
+                break
+
+        slow2 = 0
+        while True:
+            slow = nums[slow]
+            slow2 = nums[slow2]
+            if slow == slow2:
+                return slow
+
+
+class Node:
+    def __init__(self, key, val: int):
+        self.key, self.val = key, val
+        self.prev = self.next = None
+
+
+class LRUCache:
+
+    def __init__(self, capacity: int):
+        self.cap = capacity
+        self.cache = {}
+
+        # left = LRU, right = most recent
+        self.left, self.right = Node(0, 0), Node(0, 0)
+        self.left.next, self.right.prev = self.right, self.left
+
+    def remove(self, node):
+        prev, nxt = node.prev, node.next
+        prev.next, nxt.prev = nxt, prev
+
+    def insert(self, node):
+        prev, nxt = self.right.prev, self.right
+        prev.next = nxt.prev = node
+        node.next , node.prev = nxt, prev
+
+    def get(self, key: int) -> int:
+        if key in self.cache:
+            self.remove(self.cache[key])
+            self.insert(self.cache[key])
+            return self.cache[key].val
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self.remove(self.cache[key])
+        self.cache[key] = Node(key, value)
+        self.insert(self.cache[key])
+
+        if len(self.cache) > self.cap:
+            # remove from the list and delete the LRU from the hashmap
+            lru = self.left.next
+            self.remove(lru)
+            del self.cache[lru.key]
+
 
 if __name__ == "__main__":
     tp = LinkedList()
@@ -137,7 +197,8 @@ if __name__ == "__main__":
     # node3.next = node4
     # node4.next = node5
     # print(tp.reorderList(node1))
-    print(tp.removeNthFromEnd(node1, 2))
+    # print(tp.removeNthFromEnd(node1, 2))
+    print(tp.findDuplicate([1, 3, 4, 2, 2]))
     # print(tp.reverseList())
     # print(tp.twoSum([2,3,4], 6))
     # print(tp.maxArea([1,8,6,2,5,4,8,3,7]))

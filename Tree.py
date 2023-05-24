@@ -17,28 +17,28 @@ class Tree:
     def invertTree(self, root: Optional[TreeNode]):
         if root == None:
             return None
-        root.left, root.right = root.right, root.left
-        self.invertTree(root.left)
+        root.right, root.left = root.left, root.right
         self.invertTree(root.right)
+        self.invertTree(root.left)
         return root
 
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0
-        return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+        return 1+ max(self.maxDepth(root.left),self.maxDepth(root.right))
 
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         res = [0]
-
         def dfs(root):
             if not root:
                 return -1
             left = dfs(root.left)
             right = dfs(root.right)
-            res[0] = max(res[0], 2+left+right)
-            return 1+max(left, right)
+            res[0] = max(res[0],2+left+right)
+            return 1+ max(left,right)
         dfs(root)
         return res[0]
+
 
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
 
