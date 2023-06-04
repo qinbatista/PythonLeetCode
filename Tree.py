@@ -25,20 +25,20 @@ class Tree:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0
-        return 1+ max(self.maxDepth(root.left),self.maxDepth(root.right))
+        return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
 
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         res = [0]
+
         def dfs(root):
             if not root:
                 return -1
             left = dfs(root.left)
             right = dfs(root.right)
-            res[0] = max(res[0],2+left+right)
-            return 1+ max(left,right)
+            res[0] = max(res[0], 2+left+right)
+            return 1 + max(left, right)
         dfs(root)
         return res[0]
-
 
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
 
@@ -46,24 +46,26 @@ class Tree:
             if not root:
                 return [True, 0]
             left, right = dfs(root.left), dfs(root.right)
-            balanced = (left[0] and right[0] and abs(left[-1]-right[1] <= 1))
-            return [balanced, 1+max(left[1], right[1])]
+            balanced = (left[0] and right[0] and (abs(left[1]-right[1])) <= 1)
+            return [balanced, 1 + max(left[1], right[1])]
         return dfs(root)[0]
 
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         if not q and not p:
             return True
-        if not q or not p:
+        if not q and q:
             return False
-        if p.val != q.val:
+        if q and not q:
             return False
-        return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, p.right)
+        if q.val != p.val:
+            return False
+        return self.isSameTree(p.left, p.left) and self.isSameTree(p.right, p.right)
 
     def isSubtree(self, s: Optional[TreeNode], t: Optional[TreeNode]) -> bool:
-        if not s:
-            return False
         if not t:
             return True
+        if not s:
+            return False
         if self.sameTree(s, t):
             return True
         return self.isSubtree(s.left, t) or self.isSubtree(s.right, t)
@@ -121,3 +123,4 @@ class Tree:
 
 if __name__ == "__main__":
     tp = Tree()
+    tp.isBalanced()
