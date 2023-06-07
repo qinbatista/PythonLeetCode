@@ -110,6 +110,7 @@ class Tree:
         while q:
             rightSide = None
             qLen = len(q)
+
             for i in range(qLen):
                 node = q.popleft()
                 if node:
@@ -120,6 +121,26 @@ class Tree:
                 res.append(rightSide.val)
         return res
 
+    def goodNodes(self, root: TreeNode) -> int:
+
+        def dfs(node, maxVal):
+            if not node:
+                return 0
+            res = 1 if node.val >= maxVal else 0
+            maxVal = max(maxVal, node.val)
+            res += dfs(node.left, maxVal)
+            res += dfs(node.right, maxVal)
+            return res
+        return dfs(root, root.val)
+
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        def valid(node, left, right):
+            if not node:
+                return True
+            if not (node.val < right and node.val > left):
+                return False
+            return valid(node.left, left, node.val) and valid(node.right, node.val, right)
+        return valid(root, float("-inf"),float("inf"))
 
 if __name__ == "__main__":
     tp = Tree()
