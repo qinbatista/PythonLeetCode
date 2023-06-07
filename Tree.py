@@ -140,7 +140,32 @@ class Tree:
             if not (node.val < right and node.val > left):
                 return False
             return valid(node.left, left, node.val) and valid(node.right, node.val, right)
-        return valid(root, float("-inf"),float("inf"))
+        return valid(root, float("-inf"), float("inf"))
+
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        n = 0
+        stack = []
+        cur = root
+        while cur or stack:
+            while cur:
+                stack.append(cur)
+                cur = cur.left
+            cur = stack.pop()
+            n += 1
+            if n == k:
+                return cur.val
+            cur = cur.right
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        if not preorder or not inorder:
+            return None
+        root = TreeNode(preorder[0])
+        mid  = inorder.index(preorder[0])
+        root.left = self.buildTree(preorder[1:mid+1], inorder[:mid])
+        root.right = self.buildTree(preorder[mid+1:], inorder[mid+1:])
+        return root
+
+
+
 
 if __name__ == "__main__":
     tp = Tree()
