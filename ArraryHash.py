@@ -5,12 +5,12 @@ from typing import List
 
 class ArrayHash:
     def containsDuplicate(self, nums: List[int]) -> bool:
-        hash = set()
+        _hash = set()
         for num in nums:
-            if num in hash:
+            if num in _hash:
                 return True
             else:
-                hash.add(num)
+                _hash.add(num)
         return False
 
     def isAnagram(self, s: str, t: str) -> bool:
@@ -19,26 +19,25 @@ class ArrayHash:
         s_dic = {}
         t_dic = {}
         for i in range(len(s)):
-            s_dic[s[i]] = s_dic.get(s[i], 0)+1
-            t_dic[t[i]] = t_dic.get(t[i], 0)+1
+            s_dic[s[i]] = 1+s_dic.get(s[i], 0)
+            t_dic[t[i]] = 1 + t_dic.get(t[i], 0)
         return s_dic == t_dic
 
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         value_dic = {}
-        for index, value in enumerate(nums):
-            remaining = target - value
+        for i, num in enumerate(nums):
+            remaining = target - num
             if remaining in value_dic:
-                return [value_dic[remaining],index]
-            else:
-                value_dic[value] = index
-        return []
+                return [value_dic[remaining], i]
+            value_dic[num] = i
+
     def groupAnagrams(self, strs: List[str]):
         res = collections.defaultdict(list)
-        for str in strs:
-            key = [0]*26
-            for s in str:
-                key[ord(s)-ord('a')] += 1
-            res[tuple(key)].append(str)
+        for s in strs:
+            count = [0] * 26
+            for c in s:
+                count[ord(c)-ord("a")] += 1
+            res[tuple(count)].append(s)
         return res.values()
 
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:  # type: ignore
@@ -129,8 +128,8 @@ class ArrayHash:
             if num-1 not in numbers:
                 length = 0
                 while (num+length) in nums:
-                    length+=1
-                longest = max(longest,length)
+                    length += 1
+                longest = max(longest, length)
         return longest
 
 
