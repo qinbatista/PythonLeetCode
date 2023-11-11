@@ -29,36 +29,38 @@ class Stack:
 
     def evalRPN(self, tokens: List[str]) -> int:
         stack = []
-        for value in tokens:
-            if value == "+":
-                stack.append(int(stack.pop()+stack.pop()))
-            elif value == "-":
+        for token in tokens:
+            if token == "+":
                 a, b = stack.pop(), stack.pop()
-                stack.append(int(b-a))
-            elif value == "*":
-                stack.append(int(stack.pop()*stack.pop()))
-            elif value == "/":
+                stack.append(int(a)+int(b))
+            elif token == "-":
                 a, b = stack.pop(), stack.pop()
-                stack.append(int(b/a))
+                stack.append(int(b)-int(a))
+            elif token == "*":
+                a, b = stack.pop(), stack.pop()
+                stack.append(int(a)*int(b))
+            elif token == "/":
+                a, b = stack.pop(), stack.pop()
+                stack.append(int(b)/int(a))
             else:
-                stack.append(int(value))
+                stack.append(token)
         return stack[-1]
 
     def generateParenthesis(self, n: int) -> List[str]:
         stack = []
         res = []
 
-        def backTrack(open, close):
-            if open == close == n:
+        def backTrack(openN, closedN):
+            if openN == closedN == n:
                 res.append("".join(stack))
                 return
-            if open < n:
+            if openN < n:
                 stack.append("(")
-                backTrack(open+1, close)
+                backTrack(openN+1, closedN)
                 stack.pop()
-            if open > close:
+            if openN > closedN:
                 stack.append(")")
-                backTrack(open, close+1)
+                backTrack(openN, closedN+1)
                 stack.pop()
         backTrack(0, 0)
         return res
@@ -66,11 +68,11 @@ class Stack:
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         res = [0] * len(temperatures)
         stack = []
-        for index, temp in enumerate(temperatures):
-            while stack and temp > stack[-1][0]:
-                _, s_index = stack.pop()
-                res[s_index] = index-s_index
-            stack.append([temp, index])
+        for index, temperature in enumerate(temperatures):
+            while stack and temperature>stack[-1][0]:
+                stackT, stackIndex = stack.pop()
+                res[stackIndex] = index -stackIndex
+            stack.append((temperature,index))
         return res
 
     def carFleet(self, target: int, position: List[int], speed: list[int]) -> int:
@@ -84,30 +86,22 @@ class Stack:
         return len(stack)
 
     def isValid(self, s: str) -> bool:
-        if len(s) == 1:
-            return False
-
-        dic = {")": "(",
-               "]": "[",
-               "}": "{"}
+        closeSymbleDic = {")": "(", "]": "[", "}": "{"}
         stack = []
-        for _str in s:
-            if _str not in dic:
-                stack.append(_str)
+        for char in s:
+            if stack and stack[-1] == closeSymbleDic[char]:
+                stack.pop()
             else:
-                if len(stack) != 0:
-                    if stack[-1] in dic[_str]:
-                        stack.pop()
-                    else:
-                        return False
-                else:
-                    return False
-        return stack == []
+                stack.append(char)
+        if len(stack) == 0:
+            return True
+        else:
+            return False
 
 
 if __name__ == "__main__":
     s = Stack()
-    # print(s.isValid("(])"))
+    # print(s.isValid("()"))
     # s.push(-2)
     # s.push(0)
     # s.push(-3)
@@ -117,5 +111,5 @@ if __name__ == "__main__":
     # print(s.getMin())
     # print(s.evalRPN(["2", "1", "+", "3", "*"]))
     # print(s.generateParenthesis(3))
-    # print(s.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))
-    print(s.carFleet(12, [10, 8, 0, 5, 3], [2, 4, 1, 1, 3]))
+    print(s.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))
+    # print(s.carFleet(12, [10, 8, 0, 5, 3], [2, 4, 1, 1, 3]))

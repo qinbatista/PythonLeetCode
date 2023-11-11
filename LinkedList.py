@@ -23,29 +23,29 @@ class LinkedList:
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         cur = head
         prev = None
-        while cur:
-            tmp = cur.next
+        while cur.next:
+            next = cur.next
             cur.next = prev
             prev = cur
-            cur = tmp
-        return prev
+            cur = next
+        return cur.next
 
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-        dump = ListNode()
-        tail = dump
+        dummy = ListNode()
+        tail = dummy
         while list1 and list2:
             if list1.val < list2.val:
                 tail.next = list1
-                tail = tail.next
+                list1 = list1.next
             else:
                 tail.next = list2
-                tail = tail.next
+                list2 = list2.next
             tail = tail.next
         if list1:
             tail.next = list1
         elif list2:
             tail.next = list2
-        return dump.next
+        return dummy.next
 
     def reorderList(self, head: Optional[ListNode]) -> None:
         slow = head
@@ -69,33 +69,32 @@ class LinkedList:
             first, second = tmp1, tmp2
 
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
-        dummy = ListNode(0, head)
+        dummy = ListNode(0,head)
         left = dummy
         right = head
-        while n > 0 and right:
-            right = right.next
-            n -= 1
-        while right:
+        while n > 1 and right:
             left = left.next
-            right = right.next
+            n -= 1
+        # while right:
+        #     left = left.next
+        #     right = right.next
         left.next = left.next.next
         return dummy.next
 
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
-        oldToCopy = {None: None}
+        dic = {None:None}
         cur = head
         while cur:
-            copy = Node(cur.val)
-            oldToCopy[cur] = copy
+            copy = ListNode(cur.val)
+            dic[cur] = copy
+            cur = cur.next
+        while cur:
+            copy = dic[cur]
+            copy.next = dic[cur.next]
+            copy.random = dic[cur.random]
             cur = cur.next
 
-        cur = head
-        while cur:
-            copy = oldToCopy[cur]
-            copy.next = oldToCopy[cur.next]
-            copy.random = oldToCopy[cur.random]
-            cur = cur.next
-        return oldToCopy[head]
+
 
     def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
         dummy = ListNode()
@@ -104,25 +103,24 @@ class LinkedList:
         while l1 or l2 or carry:
             v1 = l1.val if l1 else 0
             v2 = l2.val if l2 else 0
-
-            val = v1+v2+carry
-            carry = val//10
-            val = val % 10
-            cur.next = ListNode(val)
-
+            value = v1+v2+carry
+            carry = value//10
+            value = value % 10
+            cur.next = ListNode(value)
             cur = cur.next
             l1 = l1.next if l1 else None
             l2 = l2.next if l2 else None
         return dummy.next
 
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-        slow, fast = head, head
-        while fast and fast.next:
-            slow = slow.next
-            fast = fast.next.next
+        slow, fast = head, head.next
+        while slow.next and fast.next:
             if slow == fast:
                 return True
+            slow = slow.next
+            fast = fast.next
         return False
+
 
     def findDuplicate(self, nums: List[int]) -> int:
         slow, fast = 0, 0
@@ -131,13 +129,12 @@ class LinkedList:
             fast = nums[nums[fast]]
             if slow == fast:
                 break
-
         slow2 = 0
         while True:
             slow = nums[slow]
             slow2 = nums[slow2]
             if slow == slow2:
-                return slow
+                return slow2
 
 
 class Node:
@@ -163,7 +160,7 @@ class LRUCache:
     def insert(self, node):
         prev, nxt = self.right.prev, self.right
         prev.next = nxt.prev = node
-        node.next , node.prev = nxt, prev
+        node.next, node.prev = nxt, prev
 
     def get(self, key: int) -> int:
         if key in self.cache:
@@ -187,18 +184,20 @@ class LRUCache:
 
 if __name__ == "__main__":
     tp = LinkedList()
-    node1 = ListNode(1, None)
-    node2 = ListNode(2, None)
-    node3 = ListNode(3, None)
-    node4 = ListNode(4, None)
-    node5 = ListNode(5, None)
+    node7 = ListNode(7, None)
+    node6 = ListNode(6, node7)
+    node5 = ListNode(5, node6)
+    node4 = ListNode(4, node5)
+    node3 = ListNode(3, node4)
+    node2 = ListNode(2, node3)
+    node1 = ListNode(1, node2)
     # node1.next = node2
     # node2.next = node3
     # node3.next = node4
     # node4.next = node5
     # print(tp.reorderList(node1))
-    # print(tp.removeNthFromEnd(node1, 2))
-    print(tp.findDuplicate([1, 3, 4, 2, 2]))
+    print(tp.removeNthFromEnd(node1, 4))
+    # print(tp.findDuplicate([1, 3, 4, 2, 2]))
     # print(tp.reverseList())
     # print(tp.twoSum([2,3,4], 6))
     # print(tp.maxArea([1,8,6,2,5,4,8,3,7]))

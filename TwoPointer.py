@@ -9,34 +9,38 @@ class TwoPointer:
 
     def isPalindrome(self, s: str) -> bool:
         newStr = ""
-        for str in s:
-            if str.isalnum():
-                newStr += str.lower()
-        return newStr == newStr[::-1]
+        for char in s:
+            if char.isalnum():
+                newStr += char.lower()
+        if newStr == newStr[::-1]:
+            return True
+        return False
 
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
-        myDic = {}
-        for index, number in enumerate(numbers):
-            remaining = target - number
-            if number in myDic:
-                return [myDic[number], index+1]
+        left = 0
+        right = len(numbers)-1
+        for i in range(len(numbers)):
+            if target < numbers[left]+numbers[right]:
+                right -= 1
+            elif target < numbers[left]+numbers[right]:
+                left += 1
             else:
-                myDic[remaining] = index+1
-        return []
+                return [left+1, right+1]
 
     def maxArea(self, height: List[int]) -> int:
         left = 0
         right = len(height)-1
-        res = 0
+        maxArea = 0
         while left < right:
-            heigh = min(height[left], height[right])
-            area = (right-left)*heigh
-            res = max(area,res)
-            if height[left]>height[right]:
-                right-=1
+            if height[left] > height[right]:
+                maxArea = max(maxArea, height[right]*(right-left))
             else:
-                left+=1
-        return res
+                maxArea = max(maxArea, height[left]*(right-left))
+            if height[left] > height[right]:
+                right -= 1
+            else:
+                left += 1
+        return maxArea
 
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         res = []
@@ -62,6 +66,6 @@ class TwoPointer:
 
 if __name__ == "__main__":
     tp = TwoPointer()
-    print(tp.isPalindrome("A man, a plan, a canal: Panama"))
+    # print(tp.isPalindrome("A man, a plan, a canal: Panama"))
     # print(tp.twoSum([2,3,4], 6))
-    # print(tp.maxArea([1,8,6,2,5,4,8,3,7]))
+    print(tp.maxArea([1,8,6,2,5,4,8,3,7]))
