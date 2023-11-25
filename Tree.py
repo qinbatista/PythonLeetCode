@@ -156,19 +156,44 @@ class Tree:
         root.right = self.buildTree(preorder[mid+1:],inorder[mid+1:])
         return root
 
+def find_closest_combination(elements, target):
+    n = len(elements)
 
+    # Initialize a matrix to store whether a particular sum is achievable
+    dp = [[False] * (target + 1) for _ in range(n + 1)]
+
+    # Mark 0 as achievable
+    for i in range(n + 1):
+        dp[i][0] = True
+
+    # Fill the matrix using dynamic programming
+    for i in range(1, n + 1):
+        for j in range(1, target + 1):
+            dp[i][j] = dp[i - 1][j]
+            if j >= elements[i - 1]:
+                dp[i][j] = dp[i][j] or dp[i - 1][j - elements[i - 1]]
+
+    # Find the maximum achievable sum closest to the target
+    closest_sum = 0
+    for j in range(target, -1, -1):
+        if dp[n][j]:
+            closest_sum = j
+            break
+
+    # Reconstruct the combination that achieves the closest sum
+    combination = []
+    i, j = n, closest_sum
+    while i > 0 and j > 0:
+        if not dp[i - 1][j]:
+            combination.append(i - 1)
+            j -= elements[i - 1]
+        i -= 1
+
+    return combination[::-1]
+
+    return combination[::-1]
 if __name__ == "__main__":
-    _root = TreeNode()
-    _root.val = 1
-
-    left = TreeNode()
-    left.val = 2
-
-    right = TreeNode()
-    right.val = 3
-
-    _root.left = left
-    _root.right = right
-
-    tp = Tree()
-    tp.rightSideView(_root)
+    bandwidth = [200, 100, 350, 50, 100]
+    total_bandwidth = 500
+    result = find_closest_combination(bandwidth, total_bandwidth)
+    print(result)
