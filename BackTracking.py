@@ -37,7 +37,6 @@ class BackTracking:
         path = {}
         result = []
         reachedTarget = set()
-        moreThanOne = set()
 
         def findTarget(target, r, c, path):
             if r >= raw or r < 0 or c >= column or c < 0 or state[r][c] == 0 or (r, c) in accessed:
@@ -46,17 +45,22 @@ class BackTracking:
                 if state[r][c] != target and state[r][c].isdigit():
                     path.append((r, c))
                     accessed.append((r, c))
+            # print("current="+state[r][c]+" r = " + str(r) + " c = "+str(c) +" target="+target)
             if state[r][c] == target:
-                if target not in reachedTarget:
-                    print(str(len(path))+":find target once="+target)
-                    result.append(path)
-                    reachedTarget.add(target)
-                    return True
-                else:
-                    moreThanOne.add(target)
-                    result.append(path)
-                    print(str(len(path))+":find target one more time=" +target+" "+str(moreThanOne))
-                    return False
+                result.append(path)
+                reachedTarget.add(target)
+                return True
+                # if target not in reachedTarget:
+                #     print(str(len(path))+":find target once="+target)
+                #     result.append(path)
+                #     reachedTarget.add(target)
+                #     return True
+                # else:
+                #     moreThanOne.add(target)
+                #     result.append(path)
+                #     print(str(len(path))+":find target one more time=" +
+                #           target+" "+str(moreThanOne))
+                #     return False
             if state[r][c].isdigit():
                 if state[r][c] == "1":
                     findTarget(target, r+1, c, path)
@@ -90,6 +94,7 @@ class BackTracking:
 
         for r in range(raw):
             for c in range(column):
+                # print("this cell is "+state[r][c])
                 if not state[r][c].isdigit() and state[r][c].islower():
                     accessed.clear()
                     path = []
@@ -97,32 +102,31 @@ class BackTracking:
                         if not findTarget(state[r][c].upper(), r, c+1, path):
                             path = []
                         else:
-                            break
+                            continue
                     if c-1 >= 0 and state[r][c] != 0:
                         if not findTarget(state[r][c].upper(), r, c-1, path):
                             path = []
                         else:
-                            break
+                            continue
                     if r+1 < raw and state[r][c] != 0:
                         if findTarget(state[r][c].upper(), r+1, c, path):
                             path = []
                         else:
-                            break
+                            continue
                     if r-1 >= 0 and state[r][c] != 0:
                         if findTarget(state[r][c].upper(), r-1, c, path):
                             path = []
                         else:
-                            break
+                            continue
         merged_result = set().union(*result)
         for i in result:
             print(i)
-        print(len(moreThanOne))
-        if len(moreThanOne) >= 1:
-            print(f"{-len(merged_result)}:{merged_result}")
-            return -len(merged_result)
-        else:
+        if len(reachedTarget) >= 1:
             print(f"{len(merged_result)}:{merged_result}")
             return len(merged_result)
+        else:
+            print(f"{-len(merged_result)}:{merged_result}")
+            return -len(merged_result)
 
 
 if __name__ == "__main__":
@@ -141,12 +145,12 @@ if __name__ == "__main__":
     #          "01000000B0",
     #          "0C00000000"]
     # -48
-    state = ["0002270003777z24",
-             "3a40052001000101",
+    state = ["00p2400003777z24",
+             "1a406P0001000101",
              "1064000001000101",
              "1006774001032501",
              "1000001001010001",
-             "1010001001064035",
-             "6227206A0622Z250"]
+             "1000001001064035",
+             "6227276A0622Z250"]#43
 
     tp.solution(state)
