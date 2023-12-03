@@ -36,6 +36,8 @@ class BackTracking:
         accessed = []
         path = {}
         result = []
+        reachedTarget = set()
+        moreThanOne = set()
 
         def findTarget(target, r, c, path):
             if r >= raw or r < 0 or c >= column or c < 0 or state[r][c] == 0 or (r, c) in accessed:
@@ -45,9 +47,16 @@ class BackTracking:
                     path.append((r, c))
                     accessed.append((r, c))
             if state[r][c] == target:
-                print("find target="+target)
-                result.append(path)
-                return True
+                if target not in reachedTarget:
+                    print(str(len(path))+":find target once="+target)
+                    result.append(path)
+                    reachedTarget.add(target)
+                    return True
+                else:
+                    moreThanOne.add(target)
+                    result.append(path)
+                    print(str(len(path))+":find target one more time=" +target+" "+str(moreThanOne))
+                    return False
             if state[r][c].isdigit():
                 if state[r][c] == "1":
                     findTarget(target, r+1, c, path)
@@ -79,14 +88,6 @@ class BackTracking:
                     findTarget(target, r+1, c, path.copy())
                     findTarget(target, r-1, c,  path.copy())
 
-            if state[r][c] == target:
-                print("find target="+target)
-                result.append(path)
-                return True
-            else:
-                path = []
-                return False
-
         for r in range(raw):
             for c in range(column):
                 if not state[r][c].isdigit() and state[r][c].islower():
@@ -113,8 +114,15 @@ class BackTracking:
                         else:
                             break
         merged_result = set().union(*result)
-        print(f"{len(merged_result)}:{merged_result}")
-        return len(merged_result)
+        for i in result:
+            print(i)
+        print(len(moreThanOne))
+        if len(moreThanOne) >= 1:
+            print(f"{-len(merged_result)}:{merged_result}")
+            return -len(merged_result)
+        else:
+            print(f"{len(merged_result)}:{merged_result}")
+            return len(merged_result)
 
 
 if __name__ == "__main__":
@@ -132,5 +140,13 @@ if __name__ == "__main__":
     #          "0c00000000",
     #          "01000000B0",
     #          "0C00000000"]
-    state = ["a727272777A"]
+    # -48
+    state = ["0002270003777z24",
+             "3a40052001000101",
+             "1064000001000101",
+             "1006774001032501",
+             "1000001001010001",
+             "1010001001064035",
+             "6227206A0622Z250"]
+
     tp.solution(state)
