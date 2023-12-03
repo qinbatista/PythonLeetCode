@@ -34,106 +34,116 @@ class BackTracking:
         column = len(state[0])
         raw = len(state)
         res = set()
+        accessed = set()
 
-        def findTarget(target, r, c):
-            print("current="+state[r][c]+" r = " +
-                  str(r) + " c = "+str(c)+" target="+target)
+        def findTarget(target, r, c, pre_r, pre_c):
+            print("current="+state[r][c]+" r = " + str(r) + " c = "+str(c) +
+                  " pre_r = "+str(pre_r) + " pre_c="+str(pre_c)+" target="+target)
             if state[r][c] == target:
-                print("state[r][c]="+state[r][c] + " target="+target)
-                return
-
+                print("find target")
+                return True
+            if state[r][c] == 0:
+                return False
             if state[r][c].isdigit():
                 if state[r][c] == "1":
-                    if (state[r+1][c] == "1" or state[r+1][c] == "3" or state[r+1][c] == "4" or state[r+1][c] == "7") and r+1 < raw:
-                        if state[r+1][c] not in res:
+                    if (state[r+1][c] == "1" or state[r+1][c] == "3" or state[r+1][c] == "4" or state[r+1][c] == "7") and r+1 < raw and r+1 != pre_r and (r+1, c) not in accessed:
+                        accessed.add((r+1, c))
+                        if findTarget(target, r+1, c, r, c):
                             res.add((r+1, c))
-                        findTarget(target, r+1, c)
-                    if (state[r-1][c] == "1" or state[r-1][c] == "5" or state[r-1][c] == "6" or state[r+1][c] == "7") and r-1 >= 0:
-                        if state[r-1][c] not in res:
+                    if (state[r-1][c] == "1" or state[r-1][c] == "5" or state[r-1][c] == "6" or state[r+1][c] == "7") and r-1 >= 0 and r-1 != pre_r and (r-1, c) not in accessed:
+                        accessed.add((r-1, c))
+                        if findTarget(target, r-1, c, r, c):
                             res.add((r-1, c))
-                        findTarget(target, r-1, c)
-
-                if state[r][c] == "2":
-                    if (state[r][c+1] == "2" or state[r][c+1] == "3" or state[r][c+1] == "4" or state[r][c+1] == "7") and c+1 < column:
-                        if state[r][c+1] not in res:
+                elif state[r][c] == "2":
+                    if (state[r][c+1] == "2" or state[r][c+1] == "3" or state[r][c+1] == "4" or state[r][c+1] == "7") and c+1 < column and c+1 != pre_c and (r, c+1) not in accessed:
+                        accessed.add((r, c+1))
+                        if findTarget(target, r, c+1, r, c):
                             res.add((r, c+1))
-                        findTarget(target, r, c+1)
-                    if (state[r][c-1] == "2" or state[r][c-1] == "2" or state[r][c-1] == "5" or state[r][c-1] == "7") and c-1 >= 0:
-                        if state[r][c-1] not in res:
+                    if (state[r][c-1] == "2" or state[r][c-1] == "2" or state[r][c-1] == "5" or state[r][c-1] == "7") and c-1 >= 0 and c-1 != pre_c and (r, c-1) not in accessed:
+                        accessed.add((r, c-1))
+                        if findTarget(target, r, c-1, r, c):
                             res.add((r, c-1))
-                        findTarget(target, r, c-1)
-
-                if state[r][c] == "3":
-                    if (state[r][c+1] == "2" or state[r][c+1] == "4" or state[r][c+1] == "5" or state[r][c+1] == "7") and c+1 < column:
-                        if state[r][c+1] not in res:
+                elif state[r][c] == "3":
+                    if (state[r][c+1] == "2" or state[r][c+1] == "4" or state[r][c+1] == "5" or state[r][c+1] == "7") and c+1 < column and c+1 != pre_c and (r, c+1) not in accessed:
+                        accessed.add((r, c+1))
+                        if findTarget(target, r, c+1, r, c):
                             res.add((r, c+1))
-                        findTarget(target, r, c+1)
-                    if (state[r+1][c] == "1" or state[r+1][c] == "5" or state[r+1][c] == "6" or state[r+1][c] == "7") and r+1 < raw:
-                        if state[r+1][c] not in res:
+                    if (state[r+1][c] == "1" or state[r+1][c] == "5" or state[r+1][c] == "6" or state[r+1][c] == "7") and r+1 < raw and r+1 != pre_r and (r+1, c) not in accessed:
+                        accessed.add((r+1, c))
+                        if findTarget(target, r+1, c, r, c):
                             res.add((r+1, c))
-                        findTarget(target, r+1, c)
-
-                if state[r][c] == "4":
-                    if (state[r][c-1] == "2" or state[r][c-1] == "3" or state[r][c-1] == "6" or state[r][c-1] == "7") and c-1 >= 0:
-                        if state[r][c-1] not in res:
+                elif state[r][c] == "4":
+                    if (state[r][c-1] == "2" or state[r][c-1] == "3" or state[r][c-1] == "6" or state[r][c-1] == "7") and c-1 >= 0 and c-1 != pre_c and (r, c-1) not in accessed:
+                        accessed.add((r, c-1))
+                        if findTarget(target, r, c-1, r, c):
                             res.add((r, c-1))
-                        findTarget(target, r, c-1)
-                    if (state[r+1][c] == "1" or state[r+1][c] == "5" or state[r+1][c] == "6" or state[r+1][c] == "7") and r+1 < raw:
-                        if state[r+1][c] not in res:
-                            res.add((r+1, c))
-                        findTarget(target, r+1, c)
-
-                if state[r][c] == "5":
-                    if (state[r][c-1] == "2" or state[r][c-1] == "3" or state[r][c-1] == "6" or state[r][c-1] == "7") and c-1 >= 0:
-                        if state[r][c-1] not in res:
+                    if (state[r+1][c] == "1" or state[r+1][c] == "5" or state[r+1][c] == "6" or state[r+1][c] == "7") and r+1 < raw and r+1 != pre_r and (r+1, c) not in accessed:
+                        accessed.add((r+1, c, r, c))
+                        if findTarget(target, r+1, c, r, c):
+                            res.add((r+1, c,))
+                elif state[r][c] == "5":
+                    if (state[r][c-1] == "2" or state[r][c-1] == "3" or state[r][c-1] == "6" or state[r][c-1] == "7") and c-1 >= 0 and c-1 != pre_c and (r, c-1) not in accessed:
+                        accessed.add((r, c-1))
+                        if findTarget(target, r, c-1, r, c):
                             res.add((r, c-1))
-                        findTarget(target, r, c-1)
-                    if (state[r-1][c] == "1" or state[r-1][c] == "3" or state[r-1][c] == "4" or state[r-1][c] == "7") and r-1 >= 0:
-                        if state[r-1][c] not in res:
+                    if (state[r-1][c] == "1" or state[r-1][c] == "3" or state[r-1][c] == "4" or state[r-1][c] == "7") and r-1 >= 0 and r-1 != pre_r and (r-1, c) not in accessed:
+                        accessed.add((r-1, c))
+                        if findTarget(target, r-1, c, r, c):
                             res.add((r-1, c))
-                        findTarget(target, r-1, c)
-
-                if state[r][c] == "6":
-                    if (state[r][c+1] == "2" or state[r][c+1] == "4" or state[r][c+1] == "5" or state[r][c+1] == "7") and c+1 < column:
-                        if state[r][c+1] not in res:
+                elif state[r][c] == "6":
+                    if (state[r][c+1] == "2" or state[r][c+1] == "4" or state[r][c+1] == "5" or state[r][c+1] == "7") and c+1 < column and c+1 != pre_c and (r, c+1) not in accessed:
+                        accessed.add((r, c+1))
+                        if findTarget(target, r, c+1, r, c):
                             res.add((r, c+1))
-                        findTarget(target, r, c+1)
-                    if (state[r-1][c] == "1" or state[r-1][c] == "3" or state[r-1][c] == "4" or state[r-1][c] == "7") and r-1 >= 0:
-                        if state[r-1][c] not in res:
+                    if (state[r-1][c] == "1" or state[r-1][c] == "3" or state[r-1][c] == "4" or state[r-1][c] == "7") and r-1 >= 0 and r-1 != pre_r and (r-1, c) not in accessed:
+                        accessed.add((r-1, c))
+                        if findTarget(target, r-1, c, r, c):
                             res.add((r-1, c))
-                        findTarget(target, r-1, c)
-
-                if state[r][c] == "7":
-                    if (state[r][c+1] == "2" or state[r][c+1] == "4" or state[r][c+1] == "5" or state[r][c+1] == "7") and c+1 < column:
-                        if state[r][c+1] not in res:
+                elif state[r][c] == "7":
+                    if (state[r][c+1] == "2" or state[r][c+1] == "4" or state[r][c+1] == "5" or state[r][c+1] == "7") and (r, c+1) not in accessed:
+                        if findTarget(target, r, c+1, r, c):
                             res.add((r, c+1))
-                        findTarget(target, r, c+1)
-                    if (state[r][c-1] == "2" or state[r][c-1] == "3" or state[r][c-1] == "6" or state[r][c-1] == "7") and c-1 >= 0:
-                        if state[r][c-1] not in res:
+                    if (state[r][c-1] == "2" or state[r][c-1] == "3" or state[r][c-1] == "6" or state[r][c-1] == "7") and (r, c-1) not in accessed:
+                        if findTarget(target, r, c-1, r, c):
                             res.add((r, c-1))
-                        findTarget(target, r, c-1)
-                    if (state[r+1][c] == "1" or state[r+1][c] == "5" or state[r+1][c] == "6" or state[r+1][c] == "7") and r+1 < raw:
-                        if state[r+1][c] not in res:
+                    if (state[r+1][c] == "1" or state[r+1][c] == "5" or state[r+1][c] == "6" or state[r+1][c] == "7") and (r+1, c) not in accessed:
+                        if findTarget(target, r+1, c, r, c):
                             res.add((r+1, c))
-                        findTarget(target, r+1, c)
-                    if (state[r-1][c] == "1" or state[r-1][c] == "3" or state[r-1][c] == "4" or state[r-1][c] == "7") and r-1 >= 0:
-                        if state[r-1][c] not in res:
+                    if (state[r-1][c] == "1" or state[r-1][c] == "3" or state[r-1][c] == "4" or state[r-1][c] == "7") and (r-1, c) not in accessed:
+                        if findTarget(target, r-1, c, r, c):
                             res.add((r-1, c))
-                        findTarget(target, r-1, c)
 
+            # if state[r-1][c] == target or state[r+1][c] == target or state[r][c-1] == target or state[r][c+1] == target:
             if c+1 < column:
-                findTarget(target, r, c+1)
+                if state[r][c+1] == target:
+                    print("find target="+target)
+                    return True
             if c-1 >= 0:
-                findTarget(target, r, c-1)
+                if state[r][c-1] == target:
+                    print("find target="+target)
+                    return True
             if r+1 < raw:
-                findTarget(target, r+1, c)
+                if state[r+1][c] == target:
+                    print("find target="+target)
+                    return True
             if r-1 >= 0:
-                findTarget(target, r-1, c)
-
+                if state[r-1][c] == target:
+                    print("find target="+target)
+                    return True
+            else:
+                return False
         for r in range(raw):
             for c in range(column):
                 if not state[r][c].isdigit() and state[r][c].islower():
-                    findTarget(state[r][c].upper(), r, c)
+                    accessed.clear()
+                    if c+1 < column:
+                        findTarget(state[r][c].upper(), r, c+1, r, c)
+                    if c-1 >= 0:
+                        findTarget(state[r][c].upper(), r, c-1, r, c)
+                    if r+1 < raw:
+                        findTarget(state[r][c].upper(), r+1, c, r, c)
+                    if r-1 >= 0:
+                        findTarget(state[r][c].upper(), r-1, c, r, c)
 
 
 if __name__ == "__main__":
