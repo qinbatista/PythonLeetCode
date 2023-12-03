@@ -37,7 +37,7 @@ class BackTracking:
         path = {}
         result = []
 
-        def findTarget(target, r, c, pre_r, pre_c, path):
+        def findTarget(target, r, c, path):
             # print("current="+state[r][c]+" r = " + str(r) + " c = "+str(c) + " pre_r = "+str(pre_r) + " pre_c="+str(pre_c)+" target="+target)
             if r >= raw or r < 0 or c >= column or c < 0 or state[r][c] == 0 or (r, c) in accessed:
                 return False
@@ -48,154 +48,57 @@ class BackTracking:
 
             if state[r][c].isdigit():
                 if state[r][c] == "1":
-                    findTarget(target, r+1, c, r, c, path)
-                    findTarget(target, r-1, c, r, c, path)
-                    # if (state[r+1][c] == "1" or state[r+1][c] == "3" or state[r+1][c] == "4" or state[r+1][c] == "7") and r+1 < raw and r+1 != pre_r and (r+1, c) not in accessed:
-                    #     path.append((r, c))
-                    #     accessed.append((r, c))
-                    #     if findTarget(target, r+1, c, r, c, path):
-                    #         res.add((r+1, c))
-                    # if (state[r-1][c] == "1" or state[r-1][c] == "5" or state[r-1][c] == "6" or state[r+1][c] == "7") and r-1 >= 0 and r-1 != pre_r and (r-1, c) not in accessed:
-                    #     path.append((r, c))
-                    #     accessed.append((r, c))
-                    #     if findTarget(target, r-1, c, r, c, path):
-                    #         res.add((r-1, c))
-                elif state[r][c] == "2":
-                    findTarget(target, r, c+1, r, c, path)
-                    findTarget(target, r, c-1, r, c, path)
-                    # if (state[r][c+1] == "2" or state[r][c+1] == "3" or state[r][c+1] == "4" or state[r][c+1] == "7") and c+1 < column and c+1 != pre_c and (r, c+1) not in accessed:
-                    #     path.append((r, c))
-                    #     accessed.append((r, c))
-                    #     if findTarget(target, r, c+1, r, c, path):
-                    #         res.add((r, c+1))
-                    # if (state[r][c-1] == "2" or state[r][c-1] == "2" or state[r][c-1] == "5" or state[r][c-1] == "7") and c-1 >= 0 and c-1 != pre_c and (r, c-1) not in accessed:
-                    #     path.append((r, c))
-                    #     accessed.append((r, c))
-                    #     if findTarget(target, r, c-1, r, c, path):
-                    #         res.add((r, c-1))
-                elif state[r][c] == "3":
-                    findTarget(target, r, c+1, r, c, path)
-                    findTarget(target, r+1, c, r, c, path)
-                    # if (state[r][c+1] == "2" or state[r][c+1] == "4" or state[r][c+1] == "5" or state[r][c+1] == "7") and c+1 < column and c+1 != pre_c and (r, c+1) not in accessed:
-                    #     path.append((r, c))
-                    #     accessed.append((r, c))
-                    #     if findTarget(target, r, c+1, r, c, path):
-                    #         res.add((r, c+1))
-                    # if (state[r+1][c] == "1" or state[r+1][c] == "5" or state[r+1][c] == "6" or state[r+1][c] == "7") and r+1 < raw and r+1 != pre_r and (r+1, c) not in accessed:
-                    #     path.append((r, c))
-                    #     accessed.append((r, c))
-                    #     if findTarget(target, r+1, c, r, c, path):
-                    #         res.add((r+1, c))
-                elif state[r][c] == "4":
-                    findTarget(target, r, c-1, r, c, path)
-                    findTarget(target, r+1, c, r, c, path)
-                    # if (state[r][c-1] == "2" or state[r][c-1] == "3" or state[r][c-1] == "6" or state[r][c-1] == "7") and c-1 >= 0 and c-1 != pre_c and (r, c-1) not in accessed:
-                    #     path.append((r, c))
-                    #     accessed.append((r, c))
-                    #     if findTarget(target, r, c-1, r, c, path):
-                    #         res.add((r, c-1))
-                    # if (state[r+1][c] == "1" or state[r+1][c] == "5" or state[r+1][c] == "6" or state[r+1][c] == "7") and r+1 < raw and r+1 != pre_r and (r+1, c) not in accessed:
-                    #     path.append((r, c))
-                    #     accessed.append((r, c))
-                    #     if findTarget(target, r+1, c, r, c, path):
-                    #         res.add((r+1, c,))
-                elif state[r][c] == "5":
-                    findTarget(target, r, c-1, r, c, path)
-                    findTarget(target, r-1, c, r, c, path)
-                    # if (state[r][c-1] == "2" or state[r][c-1] == "3" or state[r][c-1] == "6" or state[r][c-1] == "7") and c-1 >= 0 and c-1 != pre_c and (r, c-1) not in accessed:
-                    #     path.append((r, c))
-                    #     accessed.append((r, c))
-                    #     if findTarget(target, r, c-1, r, c, path):
-                    #         res.add((r, c-1))
-                    # if (state[r-1][c] == "1" or state[r-1][c] == "3" or state[r-1][c] == "4" or state[r-1][c] == "7") and r-1 >= 0 and r-1 != pre_r and (r-1, c) not in accessed:
-                    #     path.append((r, c))
-                    #     accessed.append((r, c))
-                    #     if findTarget(target, r-1, c, r, c, path):
-                    #         res.add((r-1, c))
-                elif state[r][c] == "6":
-                    findTarget(target, r, c+1, r, c, path)
-                    findTarget(target, r-1, c, r, c, path)
-                    # if (state[r][c+1] == "2" or state[r][c+1] == "4" or state[r][c+1] == "5" or state[r][c+1] == "7") and c+1 < column and c+1 != pre_c and (r, c+1) not in accessed:
-                    #     path.append((r, c))
-                    #     accessed.append((r, c))
-                    #     if findTarget(target, r, c+1, r, c, path):
-                    #         res.add((r, c+1))
-                    # if (state[r-1][c] == "1" or state[r-1][c] == "3" or state[r-1][c] == "4" or state[r-1][c] == "7") and r-1 >= 0 and r-1 != pre_r and (r-1, c) not in accessed:
-                    #     path.append((r, c))
-                    #     accessed.append((r, c))
-                    #     if findTarget(target, r-1, c, r, c, path):
-                    #         res.add((r-1, c))
-                elif state[r][c] == "7":
-                    findTarget(target, r, c+1, r, c, path.copy())
-                    findTarget(target, r, c-1, r, c, path.copy())
-                    findTarget(target, r+1, c, r, c, path.copy())
-                    findTarget(target, r-1, c, r, c, path.copy())
-                    # if (state[r][c+1] == "2" or state[r][c+1] == "4" or state[r][c+1] == "5" or state[r][c+1] == "7") and (r, c+1) not in accessed:
-                    #     path.append((r, c))
-                    #     if findTarget(target, r, c+1, r, c, path.copy()):
-                    #         accessed.append((r, c))
-                    #         res.add((r, c+1))
-                    # elif (state[r][c-1] == "2" or state[r][c-1] == "3" or state[r][c-1] == "6" or state[r][c-1] == "7") and (r, c-1) not in accessed:
-                    #     path.append((r, c))
-                    #     if findTarget(target, r, c-1, r, c, path.copy()):
-                    #         accessed.append((r, c))
-                    #         res.add((r, c-1))
-                    # elif (state[r+1][c] == "1" or state[r+1][c] == "5" or state[r+1][c] == "6" or state[r+1][c] == "7") and (r+1, c) not in accessed:
-                    #     path.append((r, c))
-                    #     if findTarget(target, r+1, c, r, c, path.copy()):
-                    #         accessed.append((r, c))
-                    #         res.add((r+1, c))
-                    # elif (state[r-1][c] == "1" or state[r-1][c] == "3" or state[r-1][c] == "4" or state[r-1][c] == "7") and (r-1, c) not in accessed:
-                    #     path.append((r, c))
-                    #     if findTarget(target, r-1, c, r, c, path.copy()):
-                    #         accessed.append((r, c))
-                    #         res.add((r-1, c))
+                    findTarget(target, r+1, c, path)
+                    findTarget(target, r-1, c, path)
 
-            # if state[r-1][c] == target or state[r+1][c] == target or state[r][c-1] == target or state[r][c+1] == target:
+                elif state[r][c] == "2":
+                    findTarget(target, r, c+1,  path)
+                    findTarget(target, r, c-1,  path)
+
+                elif state[r][c] == "3":
+                    findTarget(target, r, c+1,  path)
+                    findTarget(target, r+1, c,  path)
+
+                elif state[r][c] == "4":
+                    findTarget(target, r, c-1,  path)
+                    findTarget(target, r+1, c, path)
+
+                elif state[r][c] == "5":
+                    findTarget(target, r, c-1,  path)
+                    findTarget(target, r-1, c,  path)
+
+                elif state[r][c] == "6":
+                    findTarget(target, r, c+1,  path)
+                    findTarget(target, r-1, c,  path)
+
+                elif state[r][c] == "7":
+                    findTarget(target, r, c+1,  path.copy())
+                    findTarget(target, r, c-1,  path.copy())
+                    findTarget(target, r+1, c, path.copy())
+                    findTarget(target, r-1, c,  path.copy())
+
             if state[r][c] == target:
                 print("find target="+target)
                 result.append(path)
                 return True
             else:
                 return False
-            # if c+1 < column:
-            #     if state[r][c+1] == target:
-            #         print("find target="+target)
-            #         result.append(path)
-            #         return True
-            # if c-1 >= 0:
-            #     if state[r][c-1] == target:
-            #         print("find target="+target)
-            #         result.append(path)
-            #         return True
-            # if r+1 < raw:
-            #     if state[r+1][c] == target:
-            #         print("find target="+target)
-            #         result.append(path)
-            #         return True
-            # if r-1 >= 0:
-            #     if state[r-1][c] == target:
-            #         print("find target="+target)
-            #         result.append(path)
-            #         return True
-            # else:
-            #     return False
+
         for r in range(raw):
             for c in range(column):
                 if not state[r][c].isdigit() and state[r][c].islower():
                     accessed.clear()
                     path = []
                     if c+1 < column and state[r][c] != 0:
-                        findTarget(state[r][c].upper(), r, c+1, r, c, path)
+                        findTarget(state[r][c].upper(), r, c+1, path)
                     if c-1 >= 0 and state[r][c] != 0:
-                        findTarget(state[r][c].upper(), r, c-1, r, c, path)
+                        findTarget(state[r][c].upper(), r, c-1, path)
                     if r+1 < raw and state[r][c] != 0:
-                        findTarget(state[r][c].upper(), r+1, c, r, c, path)
+                        findTarget(state[r][c].upper(), r+1, c, path)
                     if r-1 >= 0 and state[r][c] != 0:
-                        findTarget(state[r][c].upper(), r-1, c, r, c, path)
-
+                        findTarget(state[r][c].upper(), r-1, c, path)
         merged_result = set().union(*result)
-        print(len(merged_result))
+        return len(merged_result)
 
 
 if __name__ == "__main__":
