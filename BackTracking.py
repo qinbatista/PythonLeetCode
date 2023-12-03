@@ -38,14 +38,16 @@ class BackTracking:
         result = []
 
         def findTarget(target, r, c, path):
-            # print("current="+state[r][c]+" r = " + str(r) + " c = "+str(c) + " pre_r = "+str(pre_r) + " pre_c="+str(pre_c)+" target="+target)
             if r >= raw or r < 0 or c >= column or c < 0 or state[r][c] == 0 or (r, c) in accessed:
                 return False
             else:
                 if state[r][c] != target and state[r][c].isdigit():
                     path.append((r, c))
                     accessed.append((r, c))
-
+            if state[r][c] == target:
+                print("find target="+target)
+                result.append(path)
+                return True
             if state[r][c].isdigit():
                 if state[r][c] == "1":
                     findTarget(target, r+1, c, path)
@@ -82,6 +84,7 @@ class BackTracking:
                 result.append(path)
                 return True
             else:
+                path = []
                 return False
 
         for r in range(raw):
@@ -90,28 +93,44 @@ class BackTracking:
                     accessed.clear()
                     path = []
                     if c+1 < column and state[r][c] != 0:
-                        findTarget(state[r][c].upper(), r, c+1, path)
+                        if not findTarget(state[r][c].upper(), r, c+1, path):
+                            path = []
+                        else:
+                            break
                     if c-1 >= 0 and state[r][c] != 0:
-                        findTarget(state[r][c].upper(), r, c-1, path)
+                        if not findTarget(state[r][c].upper(), r, c-1, path):
+                            path = []
+                        else:
+                            break
                     if r+1 < raw and state[r][c] != 0:
-                        findTarget(state[r][c].upper(), r+1, c, path)
+                        if findTarget(state[r][c].upper(), r+1, c, path):
+                            path = []
+                        else:
+                            break
                     if r-1 >= 0 and state[r][c] != 0:
-                        findTarget(state[r][c].upper(), r-1, c, path)
+                        if findTarget(state[r][c].upper(), r-1, c, path):
+                            path = []
+                        else:
+                            break
         merged_result = set().union(*result)
+        print(f"{len(merged_result)}:{merged_result}")
         return len(merged_result)
 
 
 if __name__ == "__main__":
     tp = BackTracking()
-    state = ["a224C22300000",
-             "0001643722B00",
-             "0b27275100000",
-             "00c7256500000",
-             "0006A45000000"]
-
     # state = ["a224C22300000",
     #          "0001643722B00",
-    #          "0b27B05100000",
-    #          "00cA256500000",
+    #          "0b27275100000",
+    #          "00c7256500000",
     #          "0006A45000000"]
+    # state = ["A0000b0000",
+    #          "0000000000",
+    #          "0000000000",
+    #          "0000a00000",
+    #          "0000000000",
+    #          "0c00000000",
+    #          "01000000B0",
+    #          "0C00000000"]
+    state = ["a727272777A"]
     tp.solution(state)
